@@ -1,0 +1,160 @@
+<html>
+
+<head>
+
+<title>
+
+Rock Paper Scissors!  
+    
+</title>
+
+<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
+</head>
+
+<style>
+    input[type=text], select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    input[type=submit] {
+      width: 100%;
+      background-color: #4c4faf;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+    
+    p {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    </style>
+
+<body>
+
+    <form onsubmit="return false">
+        <label for="name">Rock (r), paper (p), scissors (s)! --- random (Enter)  reset (q):  </label><br>
+        <input type="text" id="name" name="name" value=""><br>
+
+        <input pys-onClick="sub" type="submit" id="btn-form" value="submit">
+
+
+    </form> 
+ 
+    <p>Output:</p>
+    <p id = 'output'></p>
+    <br>
+    <p>Scoreboard</p>
+    <p id = 'scoreboard'></p>
+    <py-script>
+    tie_count= 0
+    win_count=0
+    lose_count=0
+
+    def reset(self):
+      global tie_count
+      tie_count = 0
+
+    def RPS(userchoice):
+        import random
+        import sys
+        from argparse import FileType
+
+
+        FileType = ".py"
+
+
+        #allowed character list and initializing counts
+        rps = ["r", "p", "s" , "R", "P", "S" , " ", "q" , "%"]
+
+        global tie_count
+        global win_count
+        global lose_count
+        
+
+        if userchoice != "":
+            c = True
+
+        else:
+            c = False
+
+        #Rock Paper Scissors runtime loop, first input asks for r p s (with random and quit options as well)
+        while c == True:
+
+            if userchoice not in rps:
+                return "Error! Only letters r, p, s allowed"
+                continue
+
+            elif len(userchoice) > 1:
+                return "Error! Only 1 character max allowed"
+                continue
+
+            if userchoice == " ":
+                userchoice = rps[random.randint(0, 2)]
+
+            
+
+            UC = str(userchoice).lower()
+            cpu = rps[random.randint(0, 2)]
+
+            #matchups
+            if userchoice == "%":
+                return win_count, tie_count, lose_count
+
+            if UC == "q":
+                return "rulebreaker!"
+
+            if UC == cpu:
+                tie_count+=1
+                val = "Tie! - Your input was: ", UC ,". "
+                cpuval = "CPU choice was: ", cpu ,". "
+                endval = "".join(val+cpuval)
+                
+                return endval
+
+            elif UC == "r" and cpu == "s" or UC == "s" and cpu == "p" or UC== "p" and cpu == "r":
+                win_count+=1
+                val = "Winner! - Your input was: ", UC ,". "
+                cpuval = "CPU choice was: ", cpu ,". "
+                endval = "".join(val+cpuval)
+                
+                return endval
+
+            elif UC == "r" and cpu == "p" or UC == "s" and cpu == "r" or UC== "p" and cpu == "s":
+                lose_count+=1
+                val = "Loser! - Your input was: ", UC ,". "
+                cpuval = "CPU choice was: ", cpu ,". "
+                endval = "".join(val+cpuval)
+                
+                return endval
+
+    def sub(*args,**kwargs):
+      result_place = Element('output')
+      result_place2 = Element('scoreboard')
+      input = Element('name').value
+      print(input)
+      out = RPS(input)
+      result_place.write(str(out))
+      score = RPS("%")
+      result_place2.write(str(score))
+    
+    </py-script>
+
+</body>
+</html>
